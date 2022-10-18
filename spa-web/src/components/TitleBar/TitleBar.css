@@ -3,6 +3,7 @@
     height: 4rem;
     display: flex;
     align-items: center;
+    margin: auto 2rem;
 }
 
 nav ul {
