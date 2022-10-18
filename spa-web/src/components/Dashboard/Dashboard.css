@@ -1,7 +1,7 @@
 .grid-wrapper {
-    margin: 2rem;
+    margin: 4rem;
     height: 800px;
-    width: 100%;
+    max-width: 100%;
     display: grid;
     grid-template-columns: 1.2fr 0.6fr 1.2fr; 
     grid-template-rows: 1fr 1fr; 

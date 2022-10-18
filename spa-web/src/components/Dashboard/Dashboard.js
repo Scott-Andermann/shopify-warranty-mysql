@@ -1,17 +1,19 @@
 import React from 'react';
+import BarChart from '../BarChart/BarChart';
+import ParetoChart from '../ParetoChart/ParetoChart';
 import './Dashboard.css';
 
 const Dashboard = () => {
     return ( 
         <div className='grid-wrapper'>
             <div className='rolling-bar-chart'>
-                BarChart
+                <BarChart />
             </div>
             <div className='top-10-line-chart'>
-                Line Chart
+                <ParetoChart />
             </div>
             <div className='pareto'>
-                Pareto Chart
+                <ParetoChart />
             </div>
             <div className='parts-table'>
                 Parts Table
