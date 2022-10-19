@@ -86,6 +86,7 @@ def get_top_monthly_claims(num = 10):
 
 def get_claims_by_sku(sku_list):
     response_body = {}
+    trace_data = []
     for sku in sku_list:
         year = date.today().year
         replace_month = date.today().month
@@ -124,10 +125,11 @@ def get_claims_by_sku(sku_list):
                         else: sum_claims.insert(0, 0)
 
                     dates.insert(0, start_date.strftime("%b"))
-                response_body[sku] = sum_claims
+                trace_data.append({sku: sum_claims})
         except Error as e:
             print(e)
-        response_body['Dates'] = dates
+    response_body['Dates'] = dates
+    response_body['traces'] = trace_data
     return response_body
     
 
