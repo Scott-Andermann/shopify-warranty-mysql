@@ -17,8 +17,8 @@ def home():
 @app.route('/fetch-data')
 @cross_origin()
 def fetch_data():
-    update_database()
-    
+    # update_database()
+
     response_body = {
         "status": "update successful",
     }
@@ -33,7 +33,9 @@ def bar_chart():
 @app.route('/line-chart')
 @cross_origin()
 def line_chart():
-    response_body = get_line_chart_data()
+    args = request.args
+    offset = int(args.get('offset'))
+    response_body = get_line_chart_data(offset)
     return response_body
     
 @app.route('/pareto-chart')
@@ -45,5 +47,7 @@ def pareto_chart():
 @app.route('/parts-table')
 @cross_origin()
 def parts_table():
-    response_body = get_parts_table_data()
+    args = request.args
+    offset = int(args.get('offset'))
+    response_body = get_parts_table_data(offset)
     return response_body

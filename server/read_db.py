@@ -52,10 +52,12 @@ def get_bar_chart_data():
     }
     return response_body
 
-def get_top_monthly_claims(num = 10):
+def get_top_monthly_claims(offset=0, num = 10):
     replace_month = date.today().month
     end_date = date.today().replace(day=1)
     start_date = end_date.replace(month=replace_month-1)
+    skus = []
+    claims = []
     try:
         with connect(
             host='localhost',
@@ -68,19 +70,18 @@ def get_top_monthly_claims(num = 10):
                 FROM orders 
                 WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 
                 GROUP BY sku ORDER BY sumClaims DESC 
-                LIMIT %s;
+                LIMIT %s, %s;
                 """
-            val_tuple = (start_date, end_date, num)
+            val_tuple = (start_date, end_date, offset, num)
             with connection.cursor() as cursor:
                     cursor.execute(select_orders_query, val_tuple)
                     result = cursor.fetchall()
+
+                    for item in result:
+                        skus.append(item[0])
+                        claims.append(float(item[1]))
     except Error as e:
         print(e)
-    skus = []
-    claims = []
-    for item in result:
-        skus.append(item[0])
-        claims.append(float(item[1]))
 
     return skus, claims
 
@@ -134,7 +135,7 @@ def get_claims_by_sku(sku_list):
     
 
 def get_monthly_pareto_data():
-    skus, claims = get_top_monthly_claims(15)
+    skus, claims = get_top_monthly_claims(0, 15)
     freq = []
     total = sum(claims)
     subtotal = 0
@@ -148,19 +149,19 @@ def get_monthly_pareto_data():
     }
     return response_body
 
-def get_line_chart_data():
+def get_line_chart_data(offset):
     # gather data from database, put into list and return 3 datasets, current year, Previous year, dates
     # each yearly dataset contains 10 lists of data corresponding to skus
     # TODO 
     # get list of part numbers
     # query each part number
-    skus, claims = get_top_monthly_claims()
+    skus, claims = get_top_monthly_claims(offset, 10)
     # print(skus)
     response_body = get_claims_by_sku(skus)
     return response_body
 
-def get_parts_table_data():
-    skus, claims = get_top_monthly_claims()
+def get_parts_table_data(offset=0):
+    skus, claims = get_top_monthly_claims(offset)
     select_sku_query = """
         SELECT part_name FROM parts WHERE sku = %s"""
     select_orders_query = """SELECT sum(qty) AS sumClaims
@@ -193,4 +194,4 @@ def get_parts_table_data():
  
 
 if __name__ == "__main__":
-    print(get_parts_table_data())
+    print(get_parts_table_data(10))

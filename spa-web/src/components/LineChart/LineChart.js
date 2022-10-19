@@ -5,13 +5,15 @@ import './LineChart.css';
 const LineChart = () => {
     const [data, setData] = useState([]);
     const [dates, setDates] = useState([]);
+    const [offset, setOffset] = useState(0)
 
     const getLineData = async () => {
-        const response = await fetch('http://localhost:5000/line-chart');
+        const response = await fetch(`http://localhost:5000/line-chart?offset=${offset}`);
         const result = await response.json();
         // console.log(result);
         setDates(result['Dates']);
         setData(result['traces']);
+        setOffset(prev => prev === 10 ? 0 : 10)
     } 
     
     const buildTrace = (trace) => {
@@ -47,6 +49,7 @@ const LineChart = () => {
                   useResizeHandler= {true}
                   className='line-chart-plot'
             />}
+            <button className='paginate-button' onClick={getLineData}>{offset === 10 ? '10-20' : 'Top 10'}</button>
         </div>
      );
 }

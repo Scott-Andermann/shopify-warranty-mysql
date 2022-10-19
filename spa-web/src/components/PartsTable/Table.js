@@ -39,7 +39,7 @@ const Table = ({ columns, data }) => {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {firstPageRows.map(
+                    {rows.map(
                         (row, i) => {
                             prepareRow(row);
                             return (

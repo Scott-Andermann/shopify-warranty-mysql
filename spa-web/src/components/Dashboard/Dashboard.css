@@ -1,5 +1,6 @@
 .grid-wrapper {
     margin: 4rem;
+    margin-top: 1rem;
     height: 800px;
     max-width: 100%;
     display: grid;
