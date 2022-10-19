@@ -1,6 +1,7 @@
 import React from 'react';
 import BarChart from '../BarChart/BarChart';
 import ParetoChart from '../ParetoChart/ParetoChart';
+import LineChart from '../LineChart/LineChart';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -10,7 +11,7 @@ const Dashboard = () => {
                 <BarChart />
             </div>
             <div className='top-10-line-chart'>
-                <ParetoChart />
+                <LineChart />
             </div>
             <div className='pareto'>
                 <ParetoChart />

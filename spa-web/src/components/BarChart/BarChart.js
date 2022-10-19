@@ -26,8 +26,8 @@ const BarChart = () => {
         <div className='bar-chart'>
             <Plot
                 data={[
-                    {type: 'bar', y: currData, name: '2022'},
-                    {type: 'bar', y: prevData, name: '2021'}
+                    {type: 'bar', y: prevData, name: 'Previous Year'},
+                    {type: 'bar', y: currData, name: 'Curent Year'}
                   ]}
                 layout={{autosize: true, 
                     responsive: true,
