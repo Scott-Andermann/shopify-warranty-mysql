@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from './Table'; 
+import './PartsTable.css';
 // import "react-table/react-table.css";  
 
 const PartsTable = () => {
@@ -36,7 +37,7 @@ const PartsTable = () => {
        },
     ]  
     return (  
-          <div>  
+          <div className='table-wrapper'>  
               {data.length > 0 && <Table  
                   data={data}  
                   columns={columns}  

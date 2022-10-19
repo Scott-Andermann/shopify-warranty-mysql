@@ -31,7 +31,7 @@ const Table = ({ columns, data }) => {
                                             ? column.isSortedDesc
                                                 ? ' 🔽'
                                                 : ' 🔼'
-                                            : ''}
+                                            : ' 🔼'}
                                     </span>
                                 </th>
                             ))}

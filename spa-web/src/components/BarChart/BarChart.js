@@ -23,7 +23,7 @@ const BarChart = () => {
     // console.log(currData);
 
     return ( 
-        <div className='bar-chart'>
+        <div className='bar chart'>
             <Plot
                 data={[
                     {type: 'bar', y: prevData, name: 'Previous Year'},

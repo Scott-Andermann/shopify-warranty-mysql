@@ -32,7 +32,7 @@ const LineChart = () => {
     
 
     return ( 
-        <div className='line-chart'>
+        <div className='line chart'>
             {data.length > 0 && <Plot
                 data={data.map(trace => {return {type: 'line', y: buildTrace(trace), name: setLegend(trace)}})}
                 layout={{autosize: true,

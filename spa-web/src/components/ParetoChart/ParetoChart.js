@@ -21,7 +21,7 @@ const ParetoChart = () => {
     
 
     return ( 
-        <div className='pareto-chart'>
+        <div className='pareto chart'>
             <Plot
                 data={[
                     {type: 'bar', y: claims},
