@@ -1,9 +1,9 @@
-.bar-chart {
+.line-chart {
     max-width: 100%;
-    min-width: 300px;
+    min-width: 600px;
 }
 
-.bar-chart-plot {
+.line-chart-plot {
     width: 100%;
     height: 100%;
 }

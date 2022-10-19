@@ -159,6 +159,38 @@ def get_line_chart_data():
     response_body = get_claims_by_sku(skus)
     return response_body
 
+def get_parts_table_data():
+    skus, claims = get_top_monthly_claims()
+    select_sku_query = """
+        SELECT part_name FROM parts WHERE sku = %s"""
+    select_orders_query = """SELECT sum(qty) AS sumClaims
+        FROM orders 
+        WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 AND sku = %s;
+        """
+    end_date = date.today().replace(day=1)
+    start_date = end_date.replace(year=end_date.year-1)
+    response_body = []
+    try:
+        with connect(
+            host='localhost',
+            user='root',
+            password='Renthal1!',
+            database='shopify_orders_database'
+        ) as connection:
+            for i in range(0, len(skus)):
+                sku_val_tuple = [(skus[i])]
+                val_tuple = (start_date, end_date, skus[i])
+                # print(val_tuple)
+                with connection.cursor() as cursor:
+                    cursor.execute(select_sku_query, sku_val_tuple)
+                    name = cursor.fetchall()[0][0]
+                    cursor.execute(select_orders_query, val_tuple)
+                    year_claims = cursor.fetchall()[0][0]
+                response_body.append({"sku": skus[i], "description": name, "lastMonth": claims[i], "yearClaims": year_claims})
+    except Error as e:
+            print(e)
+    return response_body
+ 
 
 if __name__ == "__main__":
-    print(get_line_chart_data())
+    print(get_parts_table_data())

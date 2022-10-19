@@ -142,6 +142,7 @@ def get_orders(connection, last):
 
 def update_database():
     init_shopify()
+    print('updating...')
     try:
         with connect(
             host='localhost',

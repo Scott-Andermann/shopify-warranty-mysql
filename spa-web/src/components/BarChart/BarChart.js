@@ -20,7 +20,7 @@ const BarChart = () => {
         getBarData()
     }, [])
 
-    
+    // console.log(currData);
 
     return ( 
         <div className='bar-chart'>
