@@ -1,0 +1,43 @@
+
+.container {  
+    margin: 4rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    max-width: 100%;
+    display: grid; 
+    grid-template-columns: 0.9fr 0.8fr 0.9fr 1.4fr; 
+    grid-template-rows: 1fr 1fr; 
+    gap: 30px 30px; 
+    grid-template-areas: 
+      "search trends trends cumulative"
+      "search tables map map"; 
+}
+
+.wrapper {
+    background-color: white; 
+    height: 475px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 30%);
+}
+
+.search { 
+    grid-area: search; 
+    height: 100%;
+}
+  
+.tables { 
+    grid-area: tables;
+}
+  
+.trends {
+    grid-area: trends; 
+}
+  
+.cumulative {
+    grid-area: cumulative; 
+}
+  
+.map {
+    grid-area: map;
+}
+  

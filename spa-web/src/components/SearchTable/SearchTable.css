@@ -1,0 +1,16 @@
+
+.search-table th {
+    padding-left: 0;
+}
+
+.search-table th:nth-child(1) {
+    width: 20px;
+}
+
+.search-table th:nth-child(2) {
+    width: 20px;
+}
+
+.search-table {
+    width: 100%;
+}

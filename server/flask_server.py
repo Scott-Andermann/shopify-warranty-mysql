@@ -1,7 +1,7 @@
 from audioop import cross
 from flask import Flask, request, Response
 from flask_cors import cross_origin
-from read_db import get_bar_chart_data, get_monthly_pareto_data, get_line_chart_data, get_parts_table_data
+from read_db import get_bar_chart_data, get_monthly_pareto_data, get_line_chart_data, get_parts_table_data, search_by_term
 from update_db import update_database
 
 app = Flask(__name__)
@@ -50,4 +50,12 @@ def parts_table():
     args = request.args
     offset = int(args.get('offset'))
     response_body = get_parts_table_data(offset)
+    return response_body
+
+@app.route('/search-term')
+@cross_origin()
+def serach_term():
+    args = request.args
+    term = args.get('term')
+    response_body = search_by_term(term)
     return response_body

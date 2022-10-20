@@ -133,7 +133,6 @@ def get_claims_by_sku(sku_list):
     response_body['traces'] = trace_data
     return response_body
     
-
 def get_monthly_pareto_data():
     skus, claims = get_top_monthly_claims(0, 15)
     freq = []
@@ -150,13 +149,7 @@ def get_monthly_pareto_data():
     return response_body
 
 def get_line_chart_data(offset):
-    # gather data from database, put into list and return 3 datasets, current year, Previous year, dates
-    # each yearly dataset contains 10 lists of data corresponding to skus
-    # TODO 
-    # get list of part numbers
-    # query each part number
     skus, claims = get_top_monthly_claims(offset, 10)
-    # print(skus)
     response_body = get_claims_by_sku(skus)
     return response_body
 
@@ -192,6 +185,30 @@ def get_parts_table_data(offset=0):
             print(e)
     return response_body
  
+def search_by_term(term):
+    select_search_term_query ="""
+        SELECT * FROM parts
+        WHERE INSTR(sku, %s) OR INSTR(part_name, %s)
+        LIMIT 20;
+        """
+    val_tuple = (term, term)
+    parts = []
+    try:
+        with connect(
+            host='localhost',
+            user='root',
+            password='Renthal1!',
+            database='shopify_orders_database'
+        ) as connection:
+            # print(val_tuple)
+            with connection.cursor() as cursor:
+                cursor.execute(select_search_term_query, val_tuple)
+                result = cursor.fetchall()
+                for part in result:
+                    parts.append(part)
+    except Error as e:
+            print(e)
+    return parts
 
 if __name__ == "__main__":
-    print(get_parts_table_data(10))
+    print(search_by_term('pump'))

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Table from './Table';
+import Table from '../Table/Table';
 import './PartsTable.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 // import "react-table/react-table.css";  
@@ -53,6 +53,7 @@ const PartsTable = () => {
                     {data.length > 0 && <Table
                         data={data}
                         columns={columns}
+                        sort={true}
                     />
                     }
                 </InfiniteScroll>

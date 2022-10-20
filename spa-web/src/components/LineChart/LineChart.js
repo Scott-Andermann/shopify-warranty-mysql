@@ -49,7 +49,7 @@ const LineChart = () => {
                   useResizeHandler= {true}
                   className='line-chart-plot'
             />}
-            <button className='paginate-button' onClick={getLineData}>{offset === 10 ? '10-20' : 'Top 10'}</button>
+            {data.length > 0 && <button className='paginate-button' onClick={getLineData}>{offset === 10 ? '10-20' : 'Top 10'}</button>}
         </div>
      );
 }

@@ -11,6 +11,14 @@
     "rolling-bar-chart top-10-line-chart top-10-line-chart"
     "pareto pareto parts-table"; 
 }
+
+.wrapper {
+    background-color: white; 
+    height: 475px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 30%);
+}
+
 .top-10-line-chart { grid-area: top-10-line-chart; }
 .rolling-bar-chart { grid-area: rolling-bar-chart; }
 .pareto { grid-area: pareto; }
