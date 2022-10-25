@@ -5,17 +5,36 @@
     margin-bottom: 2rem;
     max-width: 100%;
     display: grid; 
-    grid-template-columns: 0.9fr 0.8fr 0.9fr 1.4fr; 
-    grid-template-rows: 1fr 1fr; 
+    grid-template-columns: 1.4fr 0.9fr 0.9fr 0.9fr 0.9fr 1fr; 
+    grid-template-rows: 0.4fr 1.1fr 1.2fr; 
     gap: 30px 30px; 
     grid-template-areas: 
-      "search trends trends cumulative"
-      "search tables map map"; 
-}
+    "search details glance-sales glance-ytd glance-warranty glance-ytd-warranty"
+    "search trends trends trends cumulative cumulative"
+    "search tables tables map map map";
+  }
 
 .wrapper {
     background-color: white; 
     height: 475px;
+    width: auto;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 30%);
+    
+}
+
+.glance {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 30%);
+}
+
+.glance-box {
+    height: 200px;
+    width: 200px;
+    background-color: white; 
     border-radius: 5px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 30%);
 }
@@ -40,4 +59,9 @@
 .map {
     grid-area: map;
 }
-  
+
+.details { grid-area: details; }
+.glance-sales { grid-area: glance-sales; }
+.glance-ytd { grid-area: glance-ytd; }
+.glance-warranty { grid-area: glance-warranty; }
+.glance-ytd-warranty { grid-area: glance-ytd-warranty; }

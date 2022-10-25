@@ -16,7 +16,6 @@ const Table = ({ columns, data, sort, className }) => {
         useSortBy
     )
     const firstPageRows = rows.slice(0, 20)
-    console.log(columns);
     return (
         <>
             <table className={className} {...getTableProps()}>

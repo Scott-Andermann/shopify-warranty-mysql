@@ -27,7 +27,28 @@ def fetch_data():
 @app.route('/bar-chart')
 @cross_origin()
 def bar_chart():
-    response_body = get_bar_chart_data()
+    args = request.args
+    if len(args) == 0:
+        select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+        FROM orders 
+        WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
+        ORDER BY sumClaims 
+        DESC;
+        """
+        response_body = get_bar_chart_data(select_orders_query)
+    else:
+        skus = args.get('skus')
+        skus = skus.replace(' ', '').split(',')
+        select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+        FROM orders 
+        WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
+        AND sku = %s
+        """
+        response_body = {}
+        for sku in skus:
+            response = get_bar_chart_data(select_orders_query, sku)
+            print(sku)
+            response_body[sku] = response
     return response_body
 
 @app.route('/line-chart')
@@ -58,4 +79,22 @@ def serach_term():
     args = request.args
     term = args.get('term')
     response_body = search_by_term(term)
+    return response_body
+
+@app.route('/sales')
+@cross_origin()
+def sales():
+    args = request.args
+    skus = args.get('skus')
+    skus = skus.replace(' ', '').split(',')
+    query = """SELECT sum(qty) AS sum, count(qty) AS uniqueClaims 
+        FROM orders 
+        WHERE date BETWEEN %s AND %s
+        AND sku = %s
+        """
+    response_body = {}
+    for sku in skus:
+        response = get_bar_chart_data(query, sku)
+        print(sku)
+        response_body[sku] = response
     return response_body

@@ -2,7 +2,7 @@ from mysql.connector import connect, Error
 from datetime import datetime, date, timedelta
 
 
-def get_bar_chart_data():
+def get_bar_chart_data(query, sku=''):
     # gather data from database, put into list and return 3 datasets, current year, Previous year, dates
     year = date.today().year
     replace_month = date.today().month
@@ -16,12 +16,12 @@ def get_bar_chart_data():
             password='Renthal1!',
             database='shopify_orders_database'
         ) as connection:
-            select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
-                FROM orders 
-                WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
-                ORDER BY sumClaims 
-                DESC;
-            """
+            # select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+            #     FROM orders 
+            #     WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
+            #     ORDER BY sumClaims 
+            #     DESC;
+            # """
             sum_claims = []
             for i in range(0, 24):
                 replace_month -= 1
@@ -33,9 +33,11 @@ def get_bar_chart_data():
                 else:
                     end_date = end_date.replace(month=replace_month + 1, year=year)
                     start_date = start_date.replace(month=replace_month)
-                val_tuple = (start_date, end_date)
+                if sku == '':
+                    val_tuple = (start_date, end_date)
+                else: val_tuple = (start_date, end_date, sku)
                 with connection.cursor() as cursor:
-                    cursor.execute(select_orders_query, val_tuple)
+                    cursor.execute(query, val_tuple)
                     result = cursor.fetchall()
                     # print(type(result[0][0]))
                     if result[0][0] != None:

@@ -3,7 +3,6 @@ import Table from '../Table/Table';
 import './SearchTable.css';
 
 const SearchTable = ({data}) => {
-    console.log(data.length);
     
     const columns = [
     {

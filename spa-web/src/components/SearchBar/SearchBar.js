@@ -7,7 +7,7 @@ const SearchBar = ({searchTerm, setSearchTerm, searchForParts}) => {
         // debounce typing
         setTimeout(() => {
             setSearchTerm(e.target.value)
-        }, 2000)
+        }, 1000)
 
     }
 

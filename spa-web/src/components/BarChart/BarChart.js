@@ -8,7 +8,7 @@ const BarChart = ({dates, prevData, currData, title}) => {
             <Plot
                 data={[
                     {type: 'bar', y: prevData, name: 'Previous Year'},
-                    {type: 'bar', y: currData, name: 'Curent Year'}
+                    {type: 'bar', y: currData, name: 'Current Year'}
                   ]}
                 layout={{autosize: true, 
                     responsive: true,
