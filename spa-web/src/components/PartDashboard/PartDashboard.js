@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BarChart from '../BarChart/BarChart';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchTable from '../SearchTable/SearchTable';
+import Glance from '../Glance/Glance';
 import './PartDashboard.css';
 
 const PartDashboard = () => {
@@ -48,11 +49,6 @@ const PartDashboard = () => {
         setSalesData(result[Object.keys(result)[0]]);
     }
 
-    const getName = () => {
-        const partName = partsList.filter(element => element.sku === partSelection)[0].part_name
-        console.log(partName);
-    }
-
     useEffect(() => {
         getPartData();
         getSalesData();
@@ -67,33 +63,11 @@ const PartDashboard = () => {
         } else searchForParts('')
     }, [searchTerm]);
 
-    console.log(partsList);
-
     return (
         <main>
             {/* need to add search bar that sets the part number - ensure that p/n is 6 chars long, api will have to handle invalid part numbers or parts with no data */}
             <div className="container">
-                <div className='glance details'>
-                    <h2>Details</h2>
-                    <h3>Part Number: {partSelection.length > 0 ? partSelection : ''}</h3>
-                    <h3>Part Name: {partSelection.length > 0 ? partsList.filter(element => element.sku === partSelection)[0].part_name : ''}</h3>
-                </div>
-                <div className='glance glance-sales'>
-                    <h2>Monthly Sales</h2>
-                    <h4>greater than or less than last month</h4>
-                </div>
-                <div className='glance glance-ytd'>
-                    <h2>Yearly Sales</h2>
-                    <h4>greater than or less than last month</h4>
-                </div>
-                <div className='glance glance-warranty'>
-                    <h2>Monthly Warranty</h2>
-                    <h4>greater than or less than last month</h4>
-                </div>
-                <div className='glance glance-ytd-warranty'>
-                    <h2>Yearly Warranty</h2>
-                    <h4>greater than or less than last month</h4>
-                </div>
+                <Glance partSelection={partSelection} partsList={partsList} partData={partData} salesData={salesData}/>
                 <div className='search wrapper'>
                     <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchForParts={searchForParts}/>
                     <SearchTable data={partsList}/>
