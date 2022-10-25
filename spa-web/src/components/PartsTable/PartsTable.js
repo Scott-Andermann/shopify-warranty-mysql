@@ -20,7 +20,7 @@ const PartsTable = () => {
         getPartsTableData()
     }, [])
 
-    console.log(data);
+    // console.log(data);
 
     const columns = [{
         Header: 'SKU',
@@ -54,6 +54,7 @@ const PartsTable = () => {
                         data={data}
                         columns={columns}
                         sort={true}
+                        className='parts-table'
                     />
                     }
                 </InfiniteScroll>

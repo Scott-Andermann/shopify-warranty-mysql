@@ -7,13 +7,16 @@ const LineChart = () => {
     const [dates, setDates] = useState([]);
     const [offset, setOffset] = useState(0)
 
-    const getLineData = async () => {
-        const response = await fetch(`http://localhost:5000/line-chart?offset=${offset}`);
+    const getLineData = async (update) => {
+        console.log(offset + update);
+        let offsetValue = offset + update;
+        if (offsetValue < 0) offsetValue = 0;
+        const response = await fetch(`http://localhost:5000/line-chart?offset=${offsetValue}`);
         const result = await response.json();
         // console.log(result);
         setDates(result['Dates']);
         setData(result['traces']);
-        setOffset(prev => prev === 10 ? 0 : 10)
+        setOffset(offsetValue)
     } 
     
     const buildTrace = (trace) => {
@@ -25,7 +28,7 @@ const LineChart = () => {
     }
 
     useEffect(() => {
-        getLineData()
+        getLineData(0)
     }, [])
 
     // console.log(data);
@@ -49,7 +52,12 @@ const LineChart = () => {
                   useResizeHandler= {true}
                   className='line-chart-plot'
             />}
-            {data.length > 0 && <button className='paginate-button' onClick={getLineData}>{offset === 10 ? '10-20' : 'Top 10'}</button>}
+            {data.length > 0 && 
+            <>
+                <button className='paginate-button next' onClick={() => getLineData(10)}>Next 10</button>
+                <button className='paginate-button previous' onClick={() => getLineData(-10)}>Previous 10</button>
+            </>
+            }
         </div>
      );
 }

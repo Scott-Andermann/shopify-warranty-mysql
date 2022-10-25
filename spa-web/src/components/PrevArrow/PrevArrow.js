@@ -13,7 +13,7 @@ const PrevArrow = ({curr, prev, opposite, month}) => {
     } else if (curr === prev) {
         return (
             <div>
-                <h4>No change from last month</h4>
+                <h4>No change from last {month ? "month": 'year'}</h4>
             </div>
         )
     } else {

@@ -25,12 +25,12 @@ const Table = ({ columns, data, sort, className }) => {
                             {headerGroup.headers.map(column => (
                                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                                     {column.render('Header')}
-                                    {sort ? <span>
+                                    {sort ? <span style={{marginLeft: '8px'}}>
                                         {column.isSorted
                                             ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ' 🔼'}
+                                                ? <i class="fa-solid fa-arrow-up"></i>
+                                                : <i class="fa-solid fa-arrow-down"></i>
+                                            : <i class="fa-solid fa-arrows-up-down"></i>}
                                     </span> : <></>}
                                 </th>
                             ))}

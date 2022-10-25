@@ -10,7 +10,7 @@
     gap: 30px 30px; 
     grid-template-areas: 
     "search details glance-sales glance-ytd glance-warranty glance-ytd-warranty"
-    "search trends trends trends cumulative cumulative"
+    "search cumulative cumulative cumulative trends trends "
     "search tables tables map map map";
   }
 

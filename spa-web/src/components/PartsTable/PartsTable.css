@@ -12,10 +12,12 @@
     width: 100%;
     height:100%;
     box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.3);
+    border-radius: inherit;
 }
 
 table {
     border-spacing: 0;
+    border-radius: 5px;
 }
 
 tr:nth-child(even) {
@@ -46,11 +48,21 @@ td {
     padding: 5px;
 }
 
-td:nth-child(3) {
+.parts-table th:nth-child(1) {
+    text-align: center;
+}
+
+
+.parts-table td:nth-child(1) {
     text-align: center;
     width: 100px;
 }
-td:nth-child(4) {
+
+.parts-table td:nth-child(3) {
+    text-align: center;
+    width: 100px;
+}
+.parts-table td:nth-child(4) {
     text-align: center;
     width: 100px;
 }
