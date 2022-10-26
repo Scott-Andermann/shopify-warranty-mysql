@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import './BarChart.css';
 
-const BarChart = ({dates, prevData, currData, title}) => {
+const BarChart = ({dates, prevData, currData, title, height = 450}) => {
     return ( 
         <div className='bar chart'>
             <Plot
@@ -12,6 +12,7 @@ const BarChart = ({dates, prevData, currData, title}) => {
                   ]}
                 layout={{autosize: true, 
                     responsive: true,
+                    height:height,
                     title: title,   
                     xaxis: {
                         tickmode: "array",

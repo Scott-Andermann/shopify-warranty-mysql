@@ -1,7 +1,7 @@
 from audioop import cross
 from flask import Flask, request, Response
 from flask_cors import cross_origin
-from read_db import get_bar_chart_data, get_monthly_pareto_data, get_line_chart_data, get_parts_table_data, search_by_term
+from read_db import get_bar_chart_data, get_monthly_pareto_data, get_line_chart_data, get_parts_table_data, search_by_term, get_orders_by_zip, get_zip_loc, get_warr_by_zip
 from update_db import update_database
 
 app = Flask(__name__)
@@ -97,4 +97,35 @@ def sales():
         response = get_bar_chart_data(query, sku)
         print(sku)
         response_body[sku] = response
+    return response_body
+
+
+@app.route('/heatmap')
+@cross_origin()
+def heatmap():
+    args = request.args
+    # print(args)
+    skus = args.get('skus')
+    warranty = args.get('warranty')
+    skus = skus.replace(' ', '').split(',')
+    query = """SELECT zip_code, sum(qty) AS sum
+    FROM orders
+    WHERE sku = %s GROUP BY zip_code
+    ORDER BY sum DESC
+    """
+    warr_query = """SELECT zip_code, sum(qty) AS sum
+    FROM orders
+    WHERE sku = %s AND INSTR(tags, 'warr') > 0 GROUP BY zip_code
+    ORDER BY sum DESC
+    """
+
+    response_body = {}
+    for sku in skus:
+        # print(sku)
+        orders = get_orders_by_zip(query, sku)
+        loc_list = get_zip_loc(orders)
+        response_body[sku] = get_warr_by_zip(warr_query, loc_list, sku)
+
+        # print(response_body)
+    
     return response_body

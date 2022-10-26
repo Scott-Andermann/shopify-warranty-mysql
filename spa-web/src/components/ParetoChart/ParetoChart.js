@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Plot from 'react-plotly.js';
 import './ParetoChart.css';
 
-const ParetoChart = () => {
+const ParetoChart = ({height}) => {
     const [claims, setClaims] = useState([]);
     const [skus, setSkus] = useState([]);
     const [freq, setFreq] = useState([]);
@@ -39,7 +39,9 @@ const ParetoChart = () => {
                         overlaying: 'y',
                         side: 'right'
                         },
-                    showlegend: false }}
+                    showlegend: false,
+                    height: height
+                 }}
                   useResizeHandler= {true}
                   className='pareto-chart-plot'
             />

@@ -7,6 +7,7 @@ import TitleBar from '../TitleBar/TitleBar';
 
 const Main = () => {
     const [shouldUpdate, setShouldUpdate] = useState(false)
+    const [baseData, setBaseData] = useState([])
 
     const update = async () => {
         const response = await fetch('http://localhost:5000/fetch-data');
@@ -19,12 +20,14 @@ const Main = () => {
         update()
     }, []);
 
+    console.log(baseData);
+
     return ( 
         <BrowserRouter>
             <TitleBar />
                 <Routes>
-                    <Route path='/' element={<Dashboard />} />
-                    <Route path='/parts' element={<PartDashboard />} />
+                    <Route path='/' element={<Dashboard setBaseData={setBaseData}/>} />
+                    <Route path='/parts' element={<PartDashboard baseData={baseData} />} />
                     {/* <Route path='/part' element={<Part />} /> */}
                 </Routes>
         </BrowserRouter>

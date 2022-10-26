@@ -42,7 +42,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
             </div>
             <div className='glance glance-sales'>
                 <h2>Monthly Sales</h2>
-                {partSelection.length > 0 &&
+                {Object.keys(salesData).length > 0 &&
                     <>
                         <PrevArrow curr={salesData.currentYear[11]} prev={salesData.currentYear[10]} opposite={false} month={true} />
                         <h3>{salesData.currentYear[11]}</h3>
@@ -51,7 +51,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
             </div>
             <div className='glance glance-ytd'>
                 <h2>Yearly Sales</h2>
-                {partSelection.length > 0 &&
+                {Object.keys(salesData).length > 0 &&
                     <>
                         <PrevArrow curr={getCurrent(salesData)} prev={getPrevious(salesData)} opposite={false} month={false} />
                         <h3>{getCurrent(salesData)}</h3>
@@ -60,7 +60,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
             </div>
             <div className='glance glance-warranty'>
                 <h2>Monthly Warranty</h2>
-                {partSelection.length > 0 &&
+                {Object.keys(partData).length > 0 &&
                     <>
                         <PrevArrow curr={partData.currentYear[11]} prev={partData.currentYear[10]} opposite={true} month={true} />
                         <h3>{partData.currentYear[11]}</h3>
@@ -69,7 +69,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
             </div>
             <div className='glance glance-ytd-warranty'>
                 <h2>Yearly Warranty</h2>
-                {partSelection.length > 0 &&
+                {Object.keys(partData).length > 0 &&
                     <>
                         <PrevArrow curr={getCurrent(partData)} prev={getPrevious(partData)} opposite={true} month={false} />
                         <h3>{getCurrent(partData)}</h3>

@@ -212,5 +212,96 @@ def search_by_term(term):
             print(e)
     return parts
 
+def get_orders_by_zip(query, sku=''):
+    val_tuple = [(sku)]
+    try:
+        with connect(
+            host='localhost',
+            user='root',
+            password='Renthal1!',
+            database='shopify_orders_database'
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, val_tuple)
+                result = cursor.fetchall()
+                return result
+                # print(result)
+    except Error as e:
+        print(e)
+
+def get_zip_loc(orders):
+    zip_query = """SELECT lat, lng FROM zip WHERE zip = %s"""
+    loc_list = [] # list of objects {zip, count, lat, lng}
+    try:
+        with connect(
+            host='localhost',
+            user='root',
+            password='Renthal1!',
+            database='shopify_orders_database'
+        ) as connection:
+            max_count = 1
+            for order in orders:
+                try:
+                    val_tuple = [(int(order[0]))]
+                except ValueError:
+                    continue
+                # print(val_tuple)
+                with connection.cursor() as cursor:
+                    cursor.execute(zip_query, val_tuple)
+                    result = cursor.fetchall()
+                    # print(result[0])
+                    try:
+                        if float(order[1]) > max_count: max_count = float(order[1])
+                        loc_list.append({"zip_code": order[0], "count": float(order[1]), "count_intensity": float(order[1]) / max_count * 3, "lat": float(result[0][0]), "lng": float(result[0][1])})
+                    except IndexError:
+                        continue
+    except Error as e:
+        print(e)
+
+    return loc_list
+
+def get_warr_by_zip(query, loc_list, sku=''):
+    val_tuple = [(sku)]
+    try:
+        with connect(
+            host='localhost',
+            user='root',
+            password='Renthal1!',
+            database='shopify_orders_database'
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, val_tuple)
+                result = cursor.fetchall()
+                # print(result[0])
+                # print(loc_list[0])
+                max_count = 1
+                for claim in result:
+                    if max_count < float(claim[1]): max_count = float(claim[1])
+                    index = next((i for i, item in enumerate(loc_list) if item["zip_code"] == claim[0]), None)
+                    if index != None:
+                        loc_list[index]["warr"] = float(claim[1])
+                        loc_list[index]["warr_intensity"] = float(claim[1]) / max_count * 3
+                # print(result)
+    except Error as e:
+        print(e)
+
+    return loc_list
+    
+
 if __name__ == "__main__":
-    print(search_by_term('pump'))
+    query = """SELECT zip_code, sum(qty) AS sum
+    FROM orders
+    WHERE sku = %s GROUP BY zip_code
+    """
+    warr_query = """SELECT zip_code, sum(qty) AS sum
+    FROM orders
+    WHERE sku = %s AND INSTR(tags, 'warr') > 0 GROUP BY zip_code
+    """
+    # query = query + "AND INSTR(tags, 'warr') > 0"
+    orders = get_orders_by_zip(query, 'FZAAEN')
+    loc_list = get_zip_loc(orders)
+    print(get_warr_by_zip(warr_query, loc_list, 'FZAAEN'))
+
+        
+
+    # print(search_by_term('pump'))

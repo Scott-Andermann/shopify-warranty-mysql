@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Plot from 'react-plotly.js';
 import './LineChart.css';
 
-const LineChart = () => {
+const LineChart = ({height}) => {
     const [data, setData] = useState([]);
     const [dates, setDates] = useState([]);
     const [offset, setOffset] = useState(0)
@@ -48,6 +48,7 @@ const LineChart = () => {
                         tickvals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
                         ticktext: dates
                         },
+                        height: height,
                     showlegend: true }}
                   useResizeHandler= {true}
                   className='line-chart-plot'

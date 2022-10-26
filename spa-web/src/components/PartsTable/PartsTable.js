@@ -4,7 +4,7 @@ import './PartsTable.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 // import "react-table/react-table.css";  
 
-const PartsTable = () => {
+const PartsTable = ({setBaseData}) => {
 
     const [data, setData] = useState([]);
     const [offset, setOffset] = useState(0)
@@ -12,6 +12,7 @@ const PartsTable = () => {
     const getPartsTableData = async () => {
         const response = await fetch(`http://localhost:5000/parts-table?offset=${offset}`);
         const result = await response.json()
+        if (offset === 0) setBaseData(result);
         setData(prev => [...prev, ...result])
         setOffset(prev => prev + 10)
     }

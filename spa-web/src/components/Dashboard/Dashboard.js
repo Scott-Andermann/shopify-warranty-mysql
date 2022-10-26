@@ -5,7 +5,7 @@ import LineChart from '../LineChart/LineChart';
 import PartsTable from '../PartsTable/PartsTable';
 import './Dashboard.css';
 
-const Dashboard = () => {
+const Dashboard = ({setBaseData}) => {
 
     const [currData, setCurrData] = useState([]);
     const [prevData, setPrevData] = useState([]);
@@ -27,16 +27,16 @@ const Dashboard = () => {
         <div>
             <div className='grid-wrapper'>
                 <div className='rolling-bar-chart wrapper'>
-                    <BarChart dates={dates} prevData={prevData} currData={currData} title='Total Claims (rolling 12 months)'/>
+                    <BarChart dates={dates} prevData={prevData} currData={currData} title='Total Claims (rolling 12 months)' height={360}/>
                 </div>
                 <div className='top-10-line-chart wrapper'>
-                    <LineChart />
+                    <LineChart height={360}/>
                 </div>
                 <div className='pareto wrapper'>
-                    <ParetoChart />
+                    <ParetoChart height={360}/>
                 </div>
                 <div className='parts-table wrapper'>
-                    <PartsTable />
+                    <PartsTable setBaseData={setBaseData}/>
                 </div>
             </div>
         </div>
