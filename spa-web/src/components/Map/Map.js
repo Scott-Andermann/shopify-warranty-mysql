@@ -38,7 +38,7 @@ const Map = ({data, warranty}) => {
                     points={data}
                     longitudeExtractor={m => m.lng}
                     latitudeExtractor={m => m.lat}
-                    intensityExtractor={m => parseFloat(m.warr_intensity)/2}
+                    intensityExtractor={m => parseFloat(m.warr_intensity)}
                     max={3}
                     radius={15}
                     />

@@ -252,15 +252,15 @@ def get_zip_loc(orders):
                     # print(result[0])
                     try:
                         if float(order[1]) > max_count: max_count = float(order[1])
-                        loc_list.append({"zip_code": order[0], "count": float(order[1]), "count_intensity": float(order[1]) / max_count * 3, "lat": float(result[0][0]), "lng": float(result[0][1])})
+                        loc_list.append({"zip_code": order[0], "count": float(order[1]), "count_intensity": float(order[1]) / max_count * 3, "lat": float(result[0][0]), "lng": float(result[0][1]), "warr_intensity": 0})
                     except IndexError:
                         continue
     except Error as e:
         print(e)
 
-    return loc_list
+    return loc_list, max_count
 
-def get_warr_by_zip(query, loc_list, sku=''):
+def get_warr_by_zip(query, loc_list, max_count, sku=''):
     val_tuple = [(sku)]
     try:
         with connect(
@@ -272,11 +272,9 @@ def get_warr_by_zip(query, loc_list, sku=''):
             with connection.cursor() as cursor:
                 cursor.execute(query, val_tuple)
                 result = cursor.fetchall()
-                # print(result[0])
+                print(result[0])
                 # print(loc_list[0])
-                max_count = 1
                 for claim in result:
-                    if max_count < float(claim[1]): max_count = float(claim[1])
                     index = next((i for i, item in enumerate(loc_list) if item["zip_code"] == claim[0]), None)
                     if index != None:
                         loc_list[index]["warr"] = float(claim[1])
@@ -299,8 +297,9 @@ if __name__ == "__main__":
     """
     # query = query + "AND INSTR(tags, 'warr') > 0"
     orders = get_orders_by_zip(query, 'FZAAEN')
-    loc_list = get_zip_loc(orders)
-    print(get_warr_by_zip(warr_query, loc_list, 'FZAAEN'))
+    loc_list, max_count = get_zip_loc(orders)
+    input(max_count)
+    print(get_warr_by_zip(warr_query, loc_list, max_count, 'FZAAEN')[0])
 
         
 

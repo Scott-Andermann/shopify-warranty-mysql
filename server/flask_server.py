@@ -123,8 +123,8 @@ def heatmap():
     for sku in skus:
         # print(sku)
         orders = get_orders_by_zip(query, sku)
-        loc_list = get_zip_loc(orders)
-        response_body[sku] = get_warr_by_zip(warr_query, loc_list, sku)
+        loc_list, max_count = get_zip_loc(orders)
+        response_body[sku] = get_warr_by_zip(warr_query, loc_list, max_count, sku)
 
         # print(response_body)
     
