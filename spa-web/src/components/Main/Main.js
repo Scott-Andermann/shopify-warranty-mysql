@@ -6,8 +6,9 @@ import PartDashboard from '../PartDashboard/PartDashboard';
 import TitleBar from '../TitleBar/TitleBar';
 
 const Main = () => {
-    const [shouldUpdate, setShouldUpdate] = useState(false)
-    const [baseData, setBaseData] = useState([])
+    const [shouldUpdate, setShouldUpdate] = useState(false);
+    const [baseData, setBaseData] = useState([]);
+    const [heading, setHeading] = useState('');
 
     const update = async () => {
         const response = await fetch('http://localhost:5000/fetch-data');
@@ -24,12 +25,12 @@ const Main = () => {
 
     return ( 
         <BrowserRouter>
-            <TitleBar />
-                <Routes>
-                    <Route path='/' element={<Dashboard setBaseData={setBaseData}/>} />
-                    <Route path='/parts' element={<PartDashboard baseData={baseData} />} />
-                    {/* <Route path='/part' element={<Part />} /> */}
-                </Routes>
+            <TitleBar heading={heading}/>
+            <Routes>
+                <Route path='/' element={<Dashboard setBaseData={setBaseData} setHeading={setHeading}/>} />
+                <Route path='/parts' element={<PartDashboard baseData={baseData} setHeading={setHeading}/>} />
+                {/* <Route path='/part' element={<Part />} /> */}
+            </Routes>
         </BrowserRouter>
 
      );

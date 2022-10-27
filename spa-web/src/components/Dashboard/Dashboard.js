@@ -5,7 +5,7 @@ import LineChart from '../LineChart/LineChart';
 import PartsTable from '../PartsTable/PartsTable';
 import './Dashboard.css';
 
-const Dashboard = ({setBaseData}) => {
+const Dashboard = ({setBaseData, setHeading}) => {
 
     const [currData, setCurrData] = useState([]);
     const [prevData, setPrevData] = useState([]);
@@ -21,25 +21,26 @@ const Dashboard = ({setBaseData}) => {
 
     useEffect(() => {
         getBarData()
+        setHeading('Warranty Overview')
     }, [])
 
     return ( 
-        <div>
+        <main>
             <div className='grid-wrapper'>
                 <div className='rolling-bar-chart wrapper'>
                     <BarChart dates={dates} prevData={prevData} currData={currData} title='Total Claims (rolling 12 months)' height={360}/>
                 </div>
                 <div className='top-10-line-chart wrapper'>
-                    <LineChart height={360}/>
+                    <LineChart height={400}/>
                 </div>
                 <div className='pareto wrapper'>
-                    <ParetoChart height={360}/>
+                    <ParetoChart height={400}/>
                 </div>
                 <div className='parts-table wrapper'>
                     <PartsTable setBaseData={setBaseData}/>
                 </div>
             </div>
-        </div>
+        </main>
      );
 }
  

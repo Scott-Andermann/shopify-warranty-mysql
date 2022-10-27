@@ -6,7 +6,7 @@ import Glance from '../Glance/Glance';
 import Map from '../Map/Map';
 import './PartDashboard.css';
 
-const PartDashboard = ({baseData}) => {
+const PartDashboard = ({baseData, setHeading}) => {
 
     const reformatBaseData = () => {
         const updatedData = baseData.map(element => {return {check: Check(element.sku), sku: element.sku, part_name: element.description}})
@@ -85,6 +85,10 @@ const PartDashboard = ({baseData}) => {
             searchForParts(searchTerm)
         } else searchForParts('')
     }, [searchTerm]);
+
+    useEffect(() => {
+        setHeading('Part Explorer');
+    }, []);
 
     // console.log('parts', partsList);
     // console.log('base dat', baseData);
