@@ -6,9 +6,10 @@ def get_bar_chart_data(query, sku=''):
     # gather data from database, put into list and return 3 datasets, current year, Previous year, dates
     year = date.today().year
     replace_month = date.today().month
+    today_date = date.today()
     end_date = date.today().replace(day=1)
     start_date = end_date.replace(month=replace_month)
-    dates = [start_date.month]
+    dates = [end_date.month]
     try:
         with connect(
             host='localhost',
@@ -23,7 +24,18 @@ def get_bar_chart_data(query, sku=''):
             #     DESC;
             # """
             sum_claims = []
-            for i in range(0, 24):
+            if sku == '':
+                val_tuple = (end_date, today_date)
+            else: val_tuple = (end_date, today_date, sku)
+            with connection.cursor() as cursor:
+                cursor.execute(query, val_tuple)
+                result = cursor.fetchall()
+                # print(type(result[0][0]))
+                if result[0][0] != None:
+                    sum_claims.insert(0, float(result[0][0]))
+                else: sum_claims.insert(0, 0)
+            dates.insert(0, start_date.strftime("%b"))
+            for i in range(0, 23):
                 replace_month -= 1
                 if replace_month == 0:
                     year = year - 1
@@ -56,6 +68,7 @@ def get_bar_chart_data(query, sku=''):
 
 def get_top_monthly_claims(offset=0, num = 10):
     replace_month = date.today().month
+    today_date = date.today()
     end_date = date.today().replace(day=1)
     start_date = end_date.replace(month=replace_month-1)
     skus = []
@@ -74,6 +87,7 @@ def get_top_monthly_claims(offset=0, num = 10):
                 GROUP BY sku ORDER BY sumClaims DESC 
                 LIMIT %s, %s;
                 """
+
             val_tuple = (start_date, end_date, offset, num)
             with connection.cursor() as cursor:
                     cursor.execute(select_orders_query, val_tuple)

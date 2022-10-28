@@ -7,6 +7,12 @@ const ParetoChart = ({height}) => {
     const [skus, setSkus] = useState([]);
     const [freq, setFreq] = useState([]);
 
+    const getPrevMonth = () => {
+        const date = new Date();
+        const prevDate = new Date(date.getFullYear(), date.getMonth() - 1, 1)
+        return prevDate.toLocaleString('default', {month: 'long'})
+    }
+
     const getParetoData = async () => {
         const response = await fetch('http://localhost:5000/pareto-chart');
         const result = await response.json();
@@ -29,7 +35,7 @@ const ParetoChart = ({height}) => {
                   ]}
                 layout={{autosize: true,
                     responsive: true,
-                    title: 'Previous Month Top Claims',   
+                    title: `${getPrevMonth()} Top Claims`,   
                     xaxis: {
                         tickmode: "array",
                         tickvals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
