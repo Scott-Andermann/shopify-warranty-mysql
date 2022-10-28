@@ -3,6 +3,7 @@ import BarChart from '../BarChart/BarChart';
 import ParetoChart from '../ParetoChart/ParetoChart';
 import LineChart from '../LineChart/LineChart';
 import PartsTable from '../PartsTable/PartsTable';
+import LoadAnimation from '../LoadAnimation/LoadAnimation';
 import './Dashboard.css';
 
 const Dashboard = ({setBaseData, setHeading}) => {
@@ -28,16 +29,16 @@ const Dashboard = ({setBaseData, setHeading}) => {
         <main>
             <div className='grid-wrapper'>
                 <div className='rolling-bar-chart wrapper'>
-                    <BarChart dates={dates} prevData={prevData} currData={currData} title='Total Claims (rolling 12 months)' height={360}/>
+                    {currData.length > 0 ? <BarChart dates={dates} prevData={prevData} currData={currData} title='Total Claims (rolling 12 months)' height={360}/> : <LoadAnimation /> }
                 </div>
                 <div className='top-10-line-chart wrapper'>
-                    <LineChart height={400}/>
+                    {currData.length > 0 ? <LineChart height={400}/> : <LoadAnimation /> }
                 </div>
                 <div className='pareto wrapper'>
-                    <ParetoChart height={400}/>
+                    {currData.length > 0 ? <ParetoChart height={400}/> : <LoadAnimation />}
                 </div>
                 <div className='parts-table wrapper'>
-                    <PartsTable setBaseData={setBaseData}/>
+                    {currData.length > 0 ? <PartsTable setBaseData={setBaseData}/> : <LoadAnimation />}
                 </div>
             </div>
         </main>

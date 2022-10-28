@@ -1,3 +1,7 @@
+.search-table-wrapper {
+    padding: 1rem;
+    border-radius: 5px;
+}
 
 .search-table th {
     padding-left: 0;

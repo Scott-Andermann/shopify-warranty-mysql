@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Plot from 'react-plotly.js';
+import LoadAnimation from '../LoadAnimation/LoadAnimation';
 import './LineChart.css';
 
 const LineChart = ({height}) => {
@@ -38,7 +39,9 @@ const LineChart = ({height}) => {
 
     return ( 
         <div className='line chart'>
-            {data.length > 0 && <Plot
+            {data.length > 0 && 
+            <>
+            <Plot
                 data={data.map(trace => {return {type: 'line', y: buildTrace(trace), name: setLegend(trace)}})}
                 layout={{autosize: true,
                     responsive: true,
@@ -52,9 +55,7 @@ const LineChart = ({height}) => {
                     showlegend: true }}
                   useResizeHandler= {true}
                   className='line-chart-plot'
-            />}
-            {data.length > 0 && 
-            <>
+            />
                 <button className='paginate-button next' onClick={() => getLineData(10)}>Next 10</button>
                 <button className='paginate-button previous' onClick={() => getLineData(-10)}>Previous 10</button>
             </>

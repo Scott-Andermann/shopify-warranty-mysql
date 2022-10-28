@@ -5,6 +5,7 @@ import SearchTable from '../SearchTable/SearchTable';
 import Glance from '../Glance/Glance';
 import Map from '../Map/Map';
 import './PartDashboard.css';
+import LoadAnimation from '../LoadAnimation/LoadAnimation';
 
 const PartDashboard = ({baseData, setHeading}) => {
 
@@ -103,17 +104,19 @@ const PartDashboard = ({baseData, setHeading}) => {
                     <SearchTable data={partsList}/>
                 </div>
                 <div className="trends wrapper">
-                    <BarChart dates={dates} prevData={partData.previousYear} currData={partData.currentYear} title={`YoY Warranty - ${partSelection.toString()}`} height={360} />
+                    {dates.length > 0 ? <BarChart dates={dates} prevData={partData.previousYear} currData={partData.currentYear} title={`YoY Warranty - ${partSelection.toString()}`} height={360} /> :  partSelection.length > 0 ? <LoadAnimation /> : <></>}
                 </div>
                 <div className="cumulative wrapper">
-                    <BarChart dates={dates} prevData={salesData.previousYear} currData={salesData.currentYear} title={`YoY Online Sales - ${partSelection.toString()}`} height={360} />
+                    {dates.length > 0 ? <BarChart dates={dates} prevData={salesData.previousYear} currData={salesData.currentYear} title={`YoY Online Sales - ${partSelection.toString()}`} height={360} /> : partSelection.length > 0 ? <LoadAnimation /> : <></>}
                 </div>
-                <div className="tables wrapper"></div>
+                <div className="tables wrapper">
+                    <LoadAnimation />
+                </div>
                 <div className="map wrapper">
-                    {Object.keys(mapData).length > 0 &&
+                    {Object.keys(mapData).length > 0 ?
                         <div id='map'>
                             <Map data={mapData[Object.keys(mapData)[0]]} warranty={warranty}/>
-                        </div>
+                        </div> : partSelection.length > 0 ? <LoadAnimation /> : <></>
                     }
                 </div>
             </div>
