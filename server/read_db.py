@@ -213,7 +213,8 @@ def search_by_term(term):
     return parts
 
 def get_orders_by_zip(query, sku=''):
-    val_tuple = [(sku)]
+    val_tuple = sku
+    if sku == '': val_tuple = [(sku)]
     try:
         with connect(
             host='localhost',
@@ -261,7 +262,8 @@ def get_zip_loc(orders):
     return loc_list, max_count
 
 def get_warr_by_zip(query, loc_list, max_count, sku=''):
-    val_tuple = [(sku)]
+    val_tuple = sku
+    if sku == '': val_tuple = [(sku)]
     try:
         with connect(
             host='localhost',
@@ -272,14 +274,11 @@ def get_warr_by_zip(query, loc_list, max_count, sku=''):
             with connection.cursor() as cursor:
                 cursor.execute(query, val_tuple)
                 result = cursor.fetchall()
-                print(result[0])
-                # print(loc_list[0])
                 for claim in result:
                     index = next((i for i, item in enumerate(loc_list) if item["zip_code"] == claim[0]), None)
                     if index != None:
                         loc_list[index]["warr"] = float(claim[1])
                         loc_list[index]["warr_intensity"] = float(claim[1]) / max_count * 3
-                # print(result)
     except Error as e:
         print(e)
 

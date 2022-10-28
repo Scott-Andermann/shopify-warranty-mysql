@@ -17,11 +17,14 @@ const PartDashboard = ({baseData, setHeading}) => {
     const Check = (sku) => {
         const onChange = (e) =>{
             if (e.target.checked) {
-                console.log('setting part selection', sku);
-                setPartSelection(sku)
-        }}
+                // console.log('setting part selection', sku);
+                setPartSelection(prev => [...prev, sku])
+        } else {
+            setPartSelection(prev => prev.filter(element => element !== sku))
+        }
+    }
         return (
-            <input type='radio' onChange={onChange} name='parts' value={sku}></input>
+            <input type='checkbox' onChange={onChange} name='parts' value={sku} key={sku}></input>
         )
     }
 
@@ -47,18 +50,31 @@ const PartDashboard = ({baseData, setHeading}) => {
         }
     }
 
+    const combineData = (resultObj) => {
+        let currentYear = [0,0,0,0,0,0,0,0,0,0,0,0];
+        let previousYear = [0,0,0,0,0,0,0,0,0,0,0,0];
+        for (let item in resultObj) {
+            for (let i = 0; i < resultObj[item]['currentYear'].length; i++) {
+                currentYear[i] = currentYear[i] + resultObj[item]['currentYear'][i]
+                previousYear[i] = previousYear[i] + resultObj[item]['previousYear'][i]
+            }
+        }
+        return {currentYear: currentYear, previousYear: previousYear}
+    }
+
     const getPartData = async () => {
         const response = await fetch(`http://localhost:5000/bar-chart?skus=${partSelection.toString()}`);
         const result = await response.json();
         // console.log(result);
-        setPartData(result[Object.keys(result)[0]]);
+        // combineData(result)
+        setPartData(combineData(result));
         setDates(result[Object.keys(result)[0]].dates);
     }
 
     const getSalesData = async () => {
         const response = await fetch(`http://localhost:5000/sales?skus=${partSelection.toString()}`)
         const result = await response.json();
-        setSalesData(result[Object.keys(result)[0]]);
+        setSalesData(combineData(result));
     }
 
     const getMapData = async () => {
@@ -73,6 +89,10 @@ const PartDashboard = ({baseData, setHeading}) => {
             getPartData();
             getSalesData();
             getMapData();
+        } else {
+            setPartData([]);
+            setSalesData([]);
+            setMapData({});
         }
         // getName();
     }, [partSelection]);
@@ -80,11 +100,15 @@ const PartDashboard = ({baseData, setHeading}) => {
     useEffect(() => {
         setPartSelection([]);
         
-        setPartsList(reformatBaseData())
+        // setPartsList(reformatBaseData())
 
         if (searchTerm !== '') {
             searchForParts(searchTerm)
-        } else searchForParts('')
+        } else {
+            searchForParts('');
+            setPartData([]);
+            setSalesData([]);
+        }
     }, [searchTerm]);
 
     useEffect(() => {
@@ -93,6 +117,7 @@ const PartDashboard = ({baseData, setHeading}) => {
 
     // console.log('parts', partsList);
     // console.log('base dat', baseData);
+    // console.log(partData);
 
     return (
         <main>
@@ -104,18 +129,18 @@ const PartDashboard = ({baseData, setHeading}) => {
                     <SearchTable data={partsList}/>
                 </div>
                 <div className="trends wrapper">
-                    {dates.length > 0 ? <BarChart dates={dates} prevData={partData.previousYear} currData={partData.currentYear} title={`YoY Warranty - ${partSelection.toString()}`} height={360} /> :  partSelection.length > 0 ? <LoadAnimation /> : <></>}
+                    {dates.length > 0 && partSelection.length > 0 ? <BarChart dates={dates} prevData={partData.previousYear} currData={partData.currentYear} title={`YoY Warranty - ${partSelection.toString()}`} height={360} /> :  partSelection.length > 0 ? <LoadAnimation /> : <></>}
                 </div>
                 <div className="cumulative wrapper">
-                    {dates.length > 0 ? <BarChart dates={dates} prevData={salesData.previousYear} currData={salesData.currentYear} title={`YoY Online Sales - ${partSelection.toString()}`} height={360} /> : partSelection.length > 0 ? <LoadAnimation /> : <></>}
+                    {dates.length > 0 && partSelection.length ? <BarChart dates={dates} prevData={salesData.previousYear} currData={salesData.currentYear} title={`YoY Online Sales - ${partSelection.toString()}`} height={360} /> : partSelection.length > 0 ? <LoadAnimation /> : <></>}
                 </div>
                 <div className="tables wrapper">
                     <LoadAnimation />
                 </div>
                 <div className="map wrapper">
-                    {Object.keys(mapData).length > 0 ?
+                    {mapData.length > 0 && partSelection.length > 0 ?
                         <div id='map'>
-                            <Map data={mapData[Object.keys(mapData)[0]]} warranty={warranty}/>
+                            <Map data={mapData} warranty={warranty}/>
                         </div> : partSelection.length > 0 ? <LoadAnimation /> : <></>
                     }
                 </div>

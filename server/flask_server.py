@@ -47,8 +47,9 @@ def bar_chart():
         response_body = {}
         for sku in skus:
             response = get_bar_chart_data(select_orders_query, sku)
-            print(sku)
+            # print(sku)
             response_body[sku] = response
+    # print(response_body)
     return response_body
 
 @app.route('/line-chart')
@@ -95,7 +96,7 @@ def sales():
     response_body = {}
     for sku in skus:
         response = get_bar_chart_data(query, sku)
-        print(sku)
+        # print(sku)
         response_body[sku] = response
     return response_body
 
@@ -110,22 +111,28 @@ def heatmap():
     skus = skus.replace(' ', '').split(',')
     query = """SELECT zip_code, sum(qty) AS sum
     FROM orders
-    WHERE sku = %s GROUP BY zip_code
+    WHERE sku IN (%s) GROUP BY zip_code
     ORDER BY sum DESC
     """
     warr_query = """SELECT zip_code, sum(qty) AS sum
     FROM orders
-    WHERE sku = %s AND INSTR(tags, 'warr') > 0 GROUP BY zip_code
+    WHERE sku IN (%s) AND INSTR(tags, 'warr') > 0 GROUP BY zip_code
     ORDER BY sum DESC
     """
 
     response_body = {}
-    for sku in skus:
-        # print(sku)
-        orders = get_orders_by_zip(query, sku)
-        loc_list, max_count = get_zip_loc(orders)
-        response_body[sku] = get_warr_by_zip(warr_query, loc_list, max_count, sku)
 
-        # print(response_body)
+    # build query to include %s elements to match number of skus in query
+    in_p = ', '.join(list(map(lambda x: '%s', skus)))
+    query = query % in_p
+    warr_query = warr_query % in_p
+
+    orders = get_orders_by_zip(query, skus)
+    loc_list, max_count = get_zip_loc(orders)
+    # print(max_count)
+    # print(skus)
+    response_body = get_warr_by_zip(warr_query, loc_list, max_count, skus)
+
+    # print(response_body)
     
     return response_body

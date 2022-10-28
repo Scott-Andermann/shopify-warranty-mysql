@@ -5,7 +5,7 @@ import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3';
 
 const Map = ({data}) => {
 
-    console.log(data);
+    // console.log(data);
     return (
         <MapContainer center={[39.5, -98.35]} zoom={8} scrollWheelZoom={true} style={{height: '100%', width: '100%', borderRadius: 'inherit'}}>
             <LayersControl>

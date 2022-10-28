@@ -25,20 +25,17 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
         return data.previousYear.reduce((prev, curr) => prev + curr, initial);
     }
 
-
-    // console.log(ytd);
-
     return (
         <>
             <div className='glance details'>
                 <h2>Details</h2>
                 <h4>Part Number: 
                     <p>
-                    {partSelection.length > 0 && partSelection}
+                    {partSelection.length > 0 ? partSelection.length > 1 ? 'Multiple Parts' : partSelection[0] : ''}
                     </p>
                 </h4>
                 <h4>Part Name: 
-                    <p>{partSelection.length > 0 && partsList.filter(element => element.sku === partSelection)[0].part_name}</p>
+                    <p>{partSelection.length > 0 ? partSelection.length > 1 ? 'Multiple Parts' : partsList.filter(element => element.sku === partSelection[0])[0].part_name : ''}</p>
                 </h4>
                 <div className='blur'></div>
             </div>

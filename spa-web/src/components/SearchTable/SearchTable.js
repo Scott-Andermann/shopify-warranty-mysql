@@ -18,6 +18,11 @@ const SearchTable = ({data}) => {
         accessor: 'part_name'
     }
     ]
+    
+    if (data.length === 0) {
+        data = [{check: '', sku: '', part_name: 'No results found'}]
+    }
+
     return (
         <div className='search-table-wrapper'>
             <div className='blur' style={{marginTop: '4rem'}}></div>

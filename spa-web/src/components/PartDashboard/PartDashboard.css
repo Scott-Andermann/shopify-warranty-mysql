@@ -46,6 +46,7 @@
 
 .glance p {
     font-weight: 400;
+    min-height: 17px;
 }
 
 .glance-box {
@@ -66,6 +67,7 @@
 .search { 
     grid-area: search; 
     height: 100%;
+    min-height: 90vh;
 }
   
 .tables { 
