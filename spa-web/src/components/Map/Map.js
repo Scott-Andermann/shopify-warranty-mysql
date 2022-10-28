@@ -1,12 +1,9 @@
 import React from 'react';
 
-import { MapContainer, TileLayer, useMap, Marker, Popup, LayersControl } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl } from 'react-leaflet';
 import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3';
-import { geojson } from '../../atd';
 
-const coords = [[39.5, -98.35, 1], [39.5, -98.35, 1], [39.5, -98.35, 1]]
-
-const Map = ({data, warranty}) => {
+const Map = ({data}) => {
 
     console.log(data);
     return (

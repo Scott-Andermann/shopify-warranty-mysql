@@ -115,7 +115,6 @@ const PartDashboard = ({baseData, setHeading}) => {
                             <Map data={mapData[Object.keys(mapData)[0]]} warranty={warranty}/>
                         </div>
                     }
-                    <button className='change-layer' onClick={() => setWarranty(prev => !prev)}>{!warranty ? 'Click for Warranty' : 'Click for Sales'}</button>
                 </div>
             </div>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PrevArrow from '../PrevArrow/PrevArrow';
+import './Glance.css';
 
 const Glance = ({ partSelection, partsList, partData, salesData }) => {
     // const [ytd, setYtd] = useState({diff: 0, qty: 0});
@@ -39,6 +40,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
                 <h4>Part Name: 
                     <p>{partSelection.length > 0 && partsList.filter(element => element.sku === partSelection)[0].part_name}</p>
                 </h4>
+                <div className='blur'></div>
             </div>
             <div className='glance glance-sales'>
                 <h2>Monthly Sales</h2>
@@ -48,6 +50,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
                         <h3>{salesData.currentYear[11]}</h3>
                     </>
                 }
+                <div className='blur'></div>
             </div>
             <div className='glance glance-ytd'>
                 <h2>Yearly Sales</h2>
@@ -57,6 +60,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
                         <h3>{getCurrent(salesData)}</h3>
                     </>
                 }
+                <div className='blur'></div>
             </div>
             <div className='glance glance-warranty'>
                 <h2>Monthly Warranty</h2>
@@ -66,6 +70,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
                         <h3>{partData.currentYear[11]}</h3>
                     </>
                 }
+                <div className='blur'></div>
             </div>
             <div className='glance glance-ytd-warranty'>
                 <h2>Yearly Warranty</h2>
@@ -75,6 +80,7 @@ const Glance = ({ partSelection, partsList, partData, salesData }) => {
                         <h3>{getCurrent(partData)}</h3>
                     </>
                 }
+                <div className='blur'></div>
             </div>
         </>
     );

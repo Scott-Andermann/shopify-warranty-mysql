@@ -22,6 +22,7 @@ const BarChart = ({dates, prevData, currData, title, height = 450}) => {
                 useResizeHandler= {true}
                 className='bar-chart-plot'
             />
+            <div className='blur' style={{height: '6rem'}}></div>
         </div>
      );
 }

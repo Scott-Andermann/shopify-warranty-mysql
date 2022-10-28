@@ -27,6 +27,7 @@ main {
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 30%);
+    position: relative;
 }
 
 .glance h2 {

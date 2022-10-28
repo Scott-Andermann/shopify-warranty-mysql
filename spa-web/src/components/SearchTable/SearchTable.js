@@ -20,6 +20,7 @@ const SearchTable = ({data}) => {
     ]
     return (
         <div className='search-table-wrapper'>
+            <div className='blur' style={{marginTop: '4rem'}}></div>
             <div id='scroll' className='scroll'>
                     {data.length > 0 && <Table
                         data={data}
