@@ -137,7 +137,7 @@ const PartDashboard = ({baseData, setHeading}) => {
                     {dates.length > 0 && partSelection.length ? <BarChart dates={dates} prevData={salesData.previousYear} currData={salesData.currentYear} title={`YoY Online Sales - ${partSelection.toString()}`} height={360} /> : partSelection.length > 0 ? <LoadAnimation /> : <></>}
                 </div>
                 <div className="tables wrapper">
-                    <LoadAnimation />
+                    {/* <LoadAnimation /> */}
                 </div>
                 <div className="map wrapper">
                     {mapData.length > 0 && partSelection.length > 0 ?
