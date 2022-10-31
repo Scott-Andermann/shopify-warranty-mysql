@@ -63,7 +63,7 @@ const PartDashboard = ({baseData, setHeading}) => {
     }
 
     const getPartData = async () => {
-        const response = await fetch(`http://localhost:5000/bar-chart?skus=${partSelection.toString()}`);
+        const response = await fetch(`http://localhost:5000/bar-chart?skus=${partSelection.toString()}&warranty=Warranty`);
         const result = await response.json();
         // console.log(result);
         // combineData(result)
@@ -80,7 +80,7 @@ const PartDashboard = ({baseData, setHeading}) => {
     const getMapData = async () => {
         const response = await fetch(`http://localhost:5000/heatmap?skus=${partSelection.toString()}&warranty=${false}`)
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
         setMapData(result);
     }
 
@@ -118,6 +118,8 @@ const PartDashboard = ({baseData, setHeading}) => {
     // console.log('parts', partsList);
     // console.log('base dat', baseData);
     // console.log(partData);
+
+    console.log(dates);
 
     return (
         <main>

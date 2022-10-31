@@ -276,7 +276,7 @@ def get_orders_by_zip(query, sku=''):
         print(e)
 
 def get_zip_loc(orders):
-    zip_query = """SELECT lat, lng FROM zip WHERE zip = %s"""
+    zip_query = """SELECT lat, lng FROM uszips WHERE zip = %s"""
     loc_list = [] # list of objects {zip, count, lat, lng}
     try:
         with connect(

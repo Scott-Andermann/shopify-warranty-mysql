@@ -139,7 +139,7 @@ def heatmap():
     skus = skus.replace(' ', '').split(',')
     query = """SELECT zip_code, sum(qty) AS sum
     FROM orders
-    WHERE sku IN (%s) GROUP BY zip_code
+    WHERE sku IN (%s) GROUP BY zip_code HAVING sum > 4
     ORDER BY sum DESC
     """
     warr_query = """SELECT zip_code, sum(qty) AS sum
