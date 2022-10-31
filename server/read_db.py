@@ -1,5 +1,11 @@
-from mysql.connector import connect, Error
 from datetime import datetime, date, timedelta
+import os
+from mysql.connector import connect, Error
+from dotenv import load_dotenv
+
+def get_password():
+    load_dotenv()
+    return os.environ['SQL_PASSWORD']
 
 def get_bar_chart_data(query, sku=''):
     # gather data from database, put into list and return 3 datasets, current year, Previous year, dates
@@ -13,7 +19,7 @@ def get_bar_chart_data(query, sku=''):
         with connect(
             host='localhost',
             user='root',
-            password='Renthal1!',
+            password=get_password(),
             database='shopify_orders_database'
         ) as connection:
             # select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
@@ -103,7 +109,7 @@ def get_top_monthly_claims(select_orders_query, offset=0, num = 10):
         with connect(
             host='localhost',
             user='root',
-            password='Renthal1!',
+            password=get_password(),
             database='shopify_orders_database'
         ) as connection:
 
@@ -134,7 +140,7 @@ def get_claims_by_sku(select_orders_query, sku_list):
             with connect(
                 host='localhost',
                 user='root',
-                password='Renthal1!',
+                password=get_password(),
                 database='shopify_orders_database'
             ) as connection:
                 sum_claims = []
@@ -209,7 +215,7 @@ def get_parts_table_data(warranty, offset=0):
         with connect(
             host='localhost',
             user='root',
-            password='Renthal1!',
+            password=get_password(),
             database='shopify_orders_database'
         ) as connection:
             for i in range(0, len(skus)):
@@ -238,7 +244,7 @@ def search_by_term(term):
         with connect(
             host='localhost',
             user='root',
-            password='Renthal1!',
+            password=get_password(),
             database='shopify_orders_database'
         ) as connection:
             # print(val_tuple)
@@ -258,7 +264,7 @@ def get_orders_by_zip(query, sku=''):
         with connect(
             host='localhost',
             user='root',
-            password='Renthal1!',
+            password=get_password(),
             database='shopify_orders_database'
         ) as connection:
             with connection.cursor() as cursor:
@@ -276,7 +282,7 @@ def get_zip_loc(orders):
         with connect(
             host='localhost',
             user='root',
-            password='Renthal1!',
+            password=get_password(),
             database='shopify_orders_database'
         ) as connection:
             max_count = 1
@@ -307,7 +313,7 @@ def get_warr_by_zip(query, loc_list, max_count, sku=''):
         with connect(
             host='localhost',
             user='root',
-            password='Renthal1!',
+            password=get_password(),
             database='shopify_orders_database'
         ) as connection:
             with connection.cursor() as cursor:
