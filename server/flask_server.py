@@ -28,28 +28,52 @@ def fetch_data():
 @cross_origin()
 def bar_chart():
     args = request.args
-    if len(args) == 0:
-        select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
-        FROM orders 
-        WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
-        ORDER BY sumClaims 
-        DESC;
-        """
-        response_body = get_bar_chart_data(select_orders_query)
+    warranty = args.get('warranty')
+    if warranty == 'Warranty':
+        if len(args) == 1:
+            select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+            FROM orders 
+            WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
+            ORDER BY sumClaims 
+            DESC;
+            """
+            response_body = get_bar_chart_data(select_orders_query)
+        else:
+            skus = args.get('skus')
+            skus = skus.replace(' ', '').split(',')
+            select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+            FROM orders 
+            WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
+            AND sku = %s
+            """
+            response_body = {}
+            for sku in skus:
+                response = get_bar_chart_data(select_orders_query, sku)
+                # print(sku)
+                response_body[sku] = response
+        # print(response_body)
     else:
-        skus = args.get('skus')
-        skus = skus.replace(' ', '').split(',')
-        select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
-        FROM orders 
-        WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0
-        AND sku = %s
-        """
-        response_body = {}
-        for sku in skus:
-            response = get_bar_chart_data(select_orders_query, sku)
-            # print(sku)
-            response_body[sku] = response
-    # print(response_body)
+        if len(args) == 1:
+            select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+            FROM orders 
+            WHERE date BETWEEN %s AND %s
+            ORDER BY sumClaims 
+            DESC;
+            """
+            response_body = get_bar_chart_data(select_orders_query)
+        else:
+            skus = args.get('skus')
+            skus = skus.replace(' ', '').split(',')
+            select_orders_query = """SELECT sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+            FROM orders 
+            WHERE date BETWEEN %s AND %s
+            AND sku = %s
+            """
+            response_body = {}
+            for sku in skus:
+                response = get_bar_chart_data(select_orders_query, sku)
+                # print(sku)
+                response_body[sku] = response
     return response_body
 
 @app.route('/line-chart')
@@ -57,13 +81,16 @@ def bar_chart():
 def line_chart():
     args = request.args
     offset = int(args.get('offset'))
-    response_body = get_line_chart_data(offset)
+    warranty = args.get('warranty')
+    response_body = get_line_chart_data(warranty, offset)
     return response_body
     
 @app.route('/pareto-chart')
 @cross_origin()
 def pareto_chart():
-    response_body = get_monthly_pareto_data()
+    args = request.args
+    warranty = args.get('warranty')
+    response_body = get_monthly_pareto_data(warranty)
     return response_body
 
 @app.route('/parts-table')
@@ -71,7 +98,8 @@ def pareto_chart():
 def parts_table():
     args = request.args
     offset = int(args.get('offset'))
-    response_body = get_parts_table_data(offset)
+    warranty = args.get('warranty')
+    response_body = get_parts_table_data(warranty, offset)
     return response_body
 
 @app.route('/search-term')

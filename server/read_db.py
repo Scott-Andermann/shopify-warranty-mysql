@@ -1,7 +1,6 @@
 from mysql.connector import connect, Error
 from datetime import datetime, date, timedelta
 
-
 def get_bar_chart_data(query, sku=''):
     # gather data from database, put into list and return 3 datasets, current year, Previous year, dates
     year = date.today().year
@@ -66,7 +65,34 @@ def get_bar_chart_data(query, sku=''):
     }
     return response_body
 
-def get_top_monthly_claims(offset=0, num = 10):
+def select_orders_query_setter(warranty):
+    if warranty == 'Warranty':
+        select_orders_query = """
+            SELECT sku, sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+            FROM orders 
+            WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 
+            GROUP BY sku ORDER BY sumClaims DESC 
+            LIMIT %s, %s;
+            """
+        sku_query = """SELECT sum(qty) AS sumClaims
+            FROM orders 
+            WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 AND sku = %s;
+            """
+    else:
+        select_orders_query = """
+            SELECT sku, sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
+            FROM orders 
+            WHERE date BETWEEN %s AND %s
+            GROUP BY sku ORDER BY sumClaims DESC 
+            LIMIT %s, %s;
+            """
+        sku_query = """SELECT sum(qty) AS sumClaims
+            FROM orders 
+            WHERE date BETWEEN %s AND %s AND sku = %s;
+            """
+    return select_orders_query, sku_query
+
+def get_top_monthly_claims(select_orders_query, offset=0, num = 10):
     replace_month = date.today().month
     today_date = date.today()
     end_date = date.today().replace(day=1)
@@ -80,13 +106,6 @@ def get_top_monthly_claims(offset=0, num = 10):
             password='Renthal1!',
             database='shopify_orders_database'
         ) as connection:
-            select_orders_query = """
-                SELECT sku, sum(qty) AS sumClaims, count(qty) AS uniqueClaims 
-                FROM orders 
-                WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 
-                GROUP BY sku ORDER BY sumClaims DESC 
-                LIMIT %s, %s;
-                """
 
             val_tuple = (start_date, end_date, offset, num)
             with connection.cursor() as cursor:
@@ -101,7 +120,7 @@ def get_top_monthly_claims(offset=0, num = 10):
 
     return skus, claims
 
-def get_claims_by_sku(sku_list):
+def get_claims_by_sku(select_orders_query, sku_list):
     response_body = {}
     trace_data = []
     for sku in sku_list:
@@ -118,10 +137,6 @@ def get_claims_by_sku(sku_list):
                 password='Renthal1!',
                 database='shopify_orders_database'
             ) as connection:
-                select_orders_query = """SELECT sum(qty) AS sumClaims
-                    FROM orders 
-                    WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 AND sku = %s;
-                """
                 sum_claims = []
                 for i in range(0, 24):
                     replace_month -= 1
@@ -149,8 +164,9 @@ def get_claims_by_sku(sku_list):
     response_body['traces'] = trace_data
     return response_body
     
-def get_monthly_pareto_data():
-    skus, claims = get_top_monthly_claims(0, 15)
+def get_monthly_pareto_data(warranty):
+    select_orders_query, sku_query = select_orders_query_setter(warranty)
+    skus, claims = get_top_monthly_claims(select_orders_query, 0, 15)
     freq = []
     total = sum(claims)
     subtotal = 0
@@ -164,19 +180,28 @@ def get_monthly_pareto_data():
     }
     return response_body
 
-def get_line_chart_data(offset):
-    skus, claims = get_top_monthly_claims(offset, 10)
-    response_body = get_claims_by_sku(skus)
+def get_line_chart_data(warranty, offset):
+    select_orders_query, sku_query = select_orders_query_setter(warranty)
+    skus, claims = get_top_monthly_claims(select_orders_query, offset, 10)
+    response_body = get_claims_by_sku(sku_query, skus)
     return response_body
 
-def get_parts_table_data(offset=0):
-    skus, claims = get_top_monthly_claims(offset)
+def get_parts_table_data(warranty, offset=0):
+    select_orders_query, sku_query = select_orders_query_setter(warranty)
+    skus, claims = get_top_monthly_claims(select_orders_query, offset)
     select_sku_query = """
         SELECT part_name FROM parts WHERE sku = %s"""
-    select_orders_query = """SELECT sum(qty) AS sumClaims
-        FROM orders 
-        WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 AND sku = %s;
-        """
+    if warranty == 'Warranty':
+        select_orders_query = """SELECT sum(qty) AS sumClaims
+            FROM orders 
+            WHERE date BETWEEN %s AND %s AND INSTR(tags, 'warr') > 0 AND sku = %s;
+            """
+    else: 
+        select_orders_query = """SELECT sum(qty) AS sumClaims
+            FROM orders 
+            WHERE date BETWEEN %s AND %s AND sku = %s;
+            """
+
     end_date = date.today().replace(day=1)
     start_date = end_date.replace(year=end_date.year-1)
     response_body = []

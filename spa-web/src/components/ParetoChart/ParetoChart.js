@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Plot from 'react-plotly.js';
 import './ParetoChart.css';
 
-const ParetoChart = ({height}) => {
+const ParetoChart = ({height, type}) => {
     const [claims, setClaims] = useState([]);
     const [skus, setSkus] = useState([]);
     const [freq, setFreq] = useState([]);
@@ -13,8 +13,8 @@ const ParetoChart = ({height}) => {
         return prevDate.toLocaleString('default', {month: 'long'})
     }
 
-    const getParetoData = async () => {
-        const response = await fetch('http://localhost:5000/pareto-chart');
+    const getParetoData = async (type) => {
+        const response = await fetch(`http://localhost:5000/pareto-chart?warranty=${type}`);
         const result = await response.json();
         setClaims(result['claims']);
         setSkus(result['skus']);
@@ -22,8 +22,8 @@ const ParetoChart = ({height}) => {
     } 
 
     useEffect(() => {
-        getParetoData()
-    }, [])
+        getParetoData(type)
+    }, [type])
     
 
     return ( 
@@ -35,7 +35,7 @@ const ParetoChart = ({height}) => {
                   ]}
                 layout={{autosize: true,
                     responsive: true,
-                    title: `${getPrevMonth()} Top Claims`,   
+                    title: type === 'Warranty' ? `${getPrevMonth()} Top Claims` : `${getPrevMonth()} Top Selling Parts`,   
                     xaxis: {
                         tickmode: "array",
                         tickvals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],

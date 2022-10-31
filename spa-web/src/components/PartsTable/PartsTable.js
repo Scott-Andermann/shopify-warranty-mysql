@@ -4,22 +4,31 @@ import './PartsTable.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 // import "react-table/react-table.css";  
 
-const PartsTable = ({setBaseData}) => {
+const PartsTable = ({setBaseData, type}) => {
 
     const [data, setData] = useState([]);
     const [offset, setOffset] = useState(0)
 
-    const getPartsTableData = async () => {
-        const response = await fetch(`http://localhost:5000/parts-table?offset=${offset}`);
+    const setInitialData = async (type) => {
+        const response = await fetch(`http://localhost:5000/parts-table?offset=0&warranty=${type}`);
         const result = await response.json()
-        if (offset === 0) setBaseData(result);
+        setBaseData(result);
+        setData(result)
+        setOffset(10)
+    }
+
+    const getPartsTableData = async (type) => {
+        const response = await fetch(`http://localhost:5000/parts-table?offset=${offset}&warranty=${type}`);
+        const result = await response.json()
+        // console.log(result);
         setData(prev => [...prev, ...result])
         setOffset(prev => prev + 10)
     }
 
     useEffect(() => {
-        getPartsTableData()
-    }, [])
+        setInitialData(type)
+        // setOffset(0)
+    }, [type])
 
     // console.log(data);
 
@@ -31,12 +40,20 @@ const PartsTable = ({setBaseData}) => {
         Header: 'Description',
         accessor: 'description'
     },
+    type === 'Warranty' ? 
     {
         Header: 'Last Month Claims',
         accessor: 'lastMonth'
+    } : {
+        Header: 'Last Month Sales',
+        accessor: 'lastMonth'
     },
+    type === 'Warranty' ? 
     {
         Header: '12 Month Claims',
+        accessor: 'yearClaims'
+    } : {
+        Header: '12 Month Sales',
         accessor: 'yearClaims'
     },
     ]
@@ -45,7 +62,7 @@ const PartsTable = ({setBaseData}) => {
             <div id='scroll' className='scroll'>
                 <InfiniteScroll
                     dataLength={data.length}
-                    next={getPartsTableData}
+                    next={() => getPartsTableData(type)}
                     hasMore={true}
                     loader={<h4>Loading...</h4>}
                     scrollableTarget="scroll"

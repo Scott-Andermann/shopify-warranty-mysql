@@ -6,7 +6,6 @@ import PartDashboard from '../PartDashboard/PartDashboard';
 import TitleBar from '../TitleBar/TitleBar';
 
 const Main = () => {
-    const [shouldUpdate, setShouldUpdate] = useState(false);
     const [baseData, setBaseData] = useState([]);
     const [heading, setHeading] = useState('');
 
@@ -14,7 +13,6 @@ const Main = () => {
         const response = await fetch('http://localhost:5000/fetch-data');
         const result = await response.json();
         console.log(result);
-        setShouldUpdate(true)
     }
 
     useEffect(() => {
@@ -27,7 +25,8 @@ const Main = () => {
         <BrowserRouter>
             <TitleBar heading={heading}/>
             <Routes>
-                <Route path='/' element={<Dashboard setBaseData={setBaseData} setHeading={setHeading}/>} />
+                <Route path='/' element={<Dashboard setBaseData={setBaseData} setHeading={setHeading} type='Sales'/>} />
+                <Route path='/warranty' element={<Dashboard setBaseData={setBaseData} setHeading={setHeading} type='Warranty'/>} />
                 <Route path='/parts' element={<PartDashboard baseData={baseData} setHeading={setHeading}/>} />
                 {/* <Route path='/part' element={<Part />} /> */}
             </Routes>

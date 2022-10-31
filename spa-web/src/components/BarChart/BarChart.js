@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import './BarChart.css';
 
-const BarChart = ({dates, prevData, currData, title, height = 450}) => {
+const BarChart = ({dates, prevData, currData, title, height = 450, type}) => {
     return ( 
         <div className='bar chart'>
             <Plot

@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 import LoadAnimation from '../LoadAnimation/LoadAnimation';
 import './LineChart.css';
 
-const LineChart = ({height}) => {
+const LineChart = ({height, type}) => {
     const [data, setData] = useState([]);
     const [dates, setDates] = useState([]);
     const [offset, setOffset] = useState(0)
@@ -12,7 +12,7 @@ const LineChart = ({height}) => {
         console.log(offset + update);
         let offsetValue = offset + update;
         if (offsetValue < 0) offsetValue = 0;
-        const response = await fetch(`http://localhost:5000/line-chart?offset=${offsetValue}`);
+        const response = await fetch(`http://localhost:5000/line-chart?offset=${offsetValue}&warranty=${type}`);
         const result = await response.json();
         // console.log(result);
         setDates(result['Dates']);
@@ -30,7 +30,7 @@ const LineChart = ({height}) => {
 
     useEffect(() => {
         getLineData(0)
-    }, [])
+    }, [type])
 
     // console.log(data);
     // console.log(dates);
@@ -45,7 +45,7 @@ const LineChart = ({height}) => {
                 data={data.map(trace => {return {type: 'line', y: buildTrace(trace), name: setLegend(trace)}})}
                 layout={{autosize: true,
                     responsive: true,
-                    title: 'Top Claimed Parts',   
+                    title: type === 'Warranty' ? 'Top Claimed Parts': 'Most Sold Parts',   
                     xaxis: {
                         tickmode: "array",
                         tickvals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],

@@ -18,7 +18,10 @@ const TitleBar = ({heading}) => {
                 </div>
                 <nav>
                         <div className='nav-item'>
-                            <Link to='/'><i className="fa-solid fa-list-ul fa-lg"></i></Link>
+                            <Link to='/'><i class="fa-solid fa-tag fa-lg"></i></Link>
+                        </div>
+                        <div className='nav-item'>
+                            <Link to='/warranty'><i className="fa-solid fa-list-ul fa-lg"></i></Link>
                         </div>
                         {/* <div className='nav-item'>
                             <Link to='/heatmap'><i className="fa-solid fa-fire-flame-simple fa-lg"></i></Link>
