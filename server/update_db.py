@@ -149,7 +149,7 @@ def update_database():
             # user=input('Enter Username: '),
             # password=getpass('Enter Password: '),
             user='root',
-            password='Renthal1!',
+            password='change_password',
             database='shopify_orders_database'
         ) as connection:
             select_last_order_query = """SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1"""
